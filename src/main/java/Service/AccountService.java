@@ -19,7 +19,7 @@ public class AccountService {
     public Account addAccount(Account a) {
         if(a != null && a.getUsername() != null && a.getPassword() != null &&
         a.getUsername().length() > 0 && a.getPassword().length() > 4){
-            return accountDAO.insertNewAccount(a);
+            return accountDAO.addAccount(a);
         }else{
             return null;
         }
@@ -27,7 +27,7 @@ public class AccountService {
     
     //2. Process user logins that match the DB username/password
     public Account loginAccount(Account a) {
-        return accountDAO.accountLoginRequest(a);
+        return accountDAO.loginAccount(a);
     }
     //3. Process the creation of new messages
     

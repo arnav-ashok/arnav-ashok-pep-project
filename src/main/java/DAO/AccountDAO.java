@@ -29,7 +29,7 @@ public class AccountDAO {
     }
 
     //1. Process new user registrations with a username/password
-    public Account insertNewAccount(Account a){
+    public Account addAccount(Account a){
         Connection connection = ConnectionUtil.getConnection();
         try{
             String sql="INSERT INTO account (username, password) VALUES (?,?);";
@@ -49,7 +49,7 @@ public class AccountDAO {
 
     }
     //2. Process user logins that match the DB username/password
-    public Account accountLoginRequest(Account a){
+    public Account loginAccount(Account a){
         Connection connection = ConnectionUtil.getConnection();
         try{
             String sql= "SELECT*FROM account WHERE username=? AND password=?;";

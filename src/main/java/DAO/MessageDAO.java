@@ -12,7 +12,7 @@ public class MessageDAO {
     //2. Process user logins that match the DB username/password
     
     //3. Process the creation of new messages
-    public Message createMessage(Message m){
+    public Message createNewMessage(Message m){
         Connection connection = ConnectionUtil.getConnection();
         try{
             String sql= "INSERT INTO message (posted_by, message_text, time_posted_epoch) VALUES (?, ?, ?);";
@@ -36,7 +36,7 @@ public class MessageDAO {
     }
     
     //4. Retrieve all messages
-    public List<Message> getAllMessage(){
+    public List<Message> getAllMessages(){
         Connection connection = ConnectionUtil.getConnection();
         List<Message> messages = new ArrayList<>();
         try {
@@ -103,7 +103,7 @@ public class MessageDAO {
     }
     
     //7. Update a message text identified by ID
-    public Message updateMessageById(Message m){
+    public Message updateMessageById(int id){
         Connection connection=ConnectionUtil.getConnection();
         try{
             String sql="UPDATE message SET message_text=? WHERE message_id=?;";

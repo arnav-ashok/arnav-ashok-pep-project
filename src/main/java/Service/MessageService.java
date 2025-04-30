@@ -19,33 +19,33 @@ public class MessageService {
     
     //3. Process the creation of new messages
     public Message createNewMessage(Message m) {
-        return messageDAO.createMessage(m);
+        return messageDAO.createNewMessage(m);
         
     }
     //4. Retrieve all messages
     public List<Message> getAllMessages() {
-        return messageDAO.getAllMessage();
+        return messageDAO.getAllMessages();
         
     }
     //5. Retrieve a message by ID
-    public Message getMessageWId(Message m) {
+    public Message getMessageByID(Message m) {
         return messageDAO.getMessageByID(m.getMessage_id());
         
     }
     //6. Delete a message identified by ID
-    public Message deleteMessageWId(Message m) {
+    public Message deleteMessageById(Message m) {
         return messageDAO.deleteMessageById(m);
         
     }
     
     //7. Update a message text identified by ID
-    public Message updateMessageWId(Message m) {
+    public Message updateMessageById(Message m) {
         return messageDAO.updateMessageById(m);
         
     }
     
     //8. Retrieve all messages by an account/user
-    public List<Message> retrieveMessagesById(Message m) {
+    public List<Message> getMessagesByAccountID(Message m) {
         int account_id= m.getPosted_by();
         return messageDAO.getMessagesByAccountID(account_id);
         
