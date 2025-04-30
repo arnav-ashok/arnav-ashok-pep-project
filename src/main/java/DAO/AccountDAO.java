@@ -12,7 +12,7 @@ public class AccountDAO {
     public boolean doesAccountExist(String username){
         Connection connection = ConnectionUtil.getConnection();
         try{
-            String sql="SELECT COUNT(*) FROM account WHERE username=?";
+            String sql="SELECT COUNT(*) as count FROM account WHERE username=?";
             PreparedStatement statement= connection.prepareStatement(sql);
             statement.setString(1, username);
             ResultSet rs=statement.executeQuery();

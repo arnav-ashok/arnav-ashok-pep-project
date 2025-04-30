@@ -19,7 +19,14 @@ public class MessageService {
     
     //3. Process the creation of new messages
     public Message createNewMessage(Message m) {
-        return messageDAO.createNewMessage(m);
+        int posted_by= m.getPosted_by();
+        if(m != null && m.getMessage_text() != null && m.getMessage_text().length()<=255){
+            if (messageDAO.doesAccountExist(posted_by)){
+                return messageDAO.createNewMessage(m);
+
+            }
+        }
+        return null;
         
     }
     //4. Retrieve all messages
@@ -34,13 +41,24 @@ public class MessageService {
     }
     //6. Delete a message identified by ID
     public Message deleteMessageById(Message m) {
-        return messageDAO.deleteMessageById(m);
+        Message deletedMessage= messageDAO.getMessageByID(m.getMessage_id());
+        boolean check = messageDAO.deleteMessageById(m.getMessage_id());
+        if(check && deletedMessage!=null){
+            return deletedMessage;
+        }else{
+            return null;
+        }
+
         
     }
     
     //7. Update a message text identified by ID
     public Message updateMessageById(Message m) {
-        return messageDAO.updateMessageById(m);
+        if (m != null && m.getMessage_text() != null && m.getMessage_text().length()<=255){
+            return messageDAO.updateMessageById(m);
+        }else{
+            return null;
+        }
         
     }
     
