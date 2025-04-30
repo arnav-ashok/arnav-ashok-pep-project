@@ -1,10 +1,8 @@
 package Service;
-import DAO.AccountDAO;
+
 import DAO.MessageDAO;
-import Model.Account;
 import Model.Message;
 import java.util.List;
-import java.util.ArrayList;
 
 public class MessageService {
     private MessageDAO messageDAO;
@@ -35,14 +33,14 @@ public class MessageService {
         
     }
     //5. Retrieve a message by ID
-    public Message getMessageByID(Message m) {
-        return messageDAO.getMessageByID(m.getMessage_id());
+    public Message getMessageByID(int message_id) {
+        return messageDAO.getMessageByID(message_id);
         
     }
     //6. Delete a message identified by ID
-    public Message deleteMessageById(Message m) {
-        Message deletedMessage= messageDAO.getMessageByID(m.getMessage_id());
-        boolean check = messageDAO.deleteMessageById(m.getMessage_id());
+    public Message deleteMessageById(int message_id) {
+        Message deletedMessage= messageDAO.getMessageByID(message_id);
+        boolean check = messageDAO.deleteMessageById(message_id);
         if(check && deletedMessage!=null){
             return deletedMessage;
         }else{
@@ -63,9 +61,8 @@ public class MessageService {
     }
     
     //8. Retrieve all messages by an account/user
-    public List<Message> getMessagesByAccountID(Message m) {
-        int account_id= m.getPosted_by();
-        return messageDAO.getMessagesByAccountID(account_id);
+    public List<Message> getMessagesByAccountID(int id) {
+        return messageDAO.getMessagesByAccountID(id);
         
     }
 }

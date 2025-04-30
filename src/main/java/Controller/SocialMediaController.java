@@ -11,6 +11,8 @@ import io.javalin.http.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.List;
+
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
@@ -34,31 +36,23 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         app.start(8080);
         //1. Process new user registrations with a username/password
-        app.post("/register", this::exampleHandler);
+        app.post("/register", this::addAccount);
         //2. Process user logins that match the DB username/password
-        app.post("/login", this::exampleHandler);
+        app.post("/login", this::loginAccount);
         //3. Process the creation of new messages
-        app.post("/messages", this::exampleHandler);
+        app.post("/messages", this::createNewMessage);
         //4. Retrieve all messages
-        app.get("/messages", this::exampleHandler);
+        app.get("/messages", this::getAllMessages);
         //5. Retrieve a message by ID
-        app.get("/messages/{message_id}", this::exampleHandler);
+        app.get("/messages/{message_id}", this::getMessageByID);
         //6. Delete a message identified by ID
-        app.delete("/messages/{message_id}", this::exampleHandler);
+        app.delete("/messages/{message_id}", this::deleteMessageById);
         //7. Update a message text identified by ID
-        app.patch("/messages/{message_id}", this::exampleHandler);
+        app.patch("/messages/{message_id}", this::updateMessageById);
         //8. Retrieve all messages by an account/user
-        app.get("/accounts/{account_id}/messages", this::exampleHandler);
+        app.get("/accounts/{account_id}/messages", this::getMessagesByAccountID);
 
         return app;
-    }
-
-    /**
-     * This is an example handler for an example endpoint.
-     * @param context The Javalin Context object manages information about both the HTTP request and response.
-     */
-    private void exampleHandler(Context context) {
-        context.json("sample text");
     }
 
     //1. Process new user registrations with a username/password
@@ -67,8 +61,17 @@ public class SocialMediaController {
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      * In this case, we will be handling the register POST request.
      */
-    private void registerUser(Context context) throws JsonProcessingException {
-        
+    private void addAccount(Context context) throws JsonProcessingException {
+        ObjectMapper om= new ObjectMapper();
+        Account account = om.readValue(context.body(), Account.class);
+        Account addedAccount = accountService.addAccount(account);
+        if(addedAccount != null){
+            context.json(addedAccount);
+            context.status(200);
+        }else{
+            context.status(400);
+        }
+
     }
 
     //2. Process user logins that match the DB username/password
@@ -76,8 +79,17 @@ public class SocialMediaController {
      * This is an example handler for an example endpoint.
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
-    private void exampleHandler(Context context) {
-        context.json("sample text");
+    private void loginAccount(Context context) throws JsonProcessingException {
+        ObjectMapper om= new ObjectMapper();
+        Account account = om.readValue(context.body(), Account.class);
+        Account loginAccount = accountService.loginAccount(account);
+        if(loginAccount != null){
+            context.json(loginAccount);
+            context.status(200);
+        }else{
+            context.status(400);
+        }
+
     }
 
     //3. Process the creation of new messages
@@ -85,17 +97,25 @@ public class SocialMediaController {
      * This is an example handler for an example endpoint.
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
-    private void exampleHandler(Context context) {
-        context.json("sample text");
+    private void createNewMessage(Context context) throws JsonProcessingException {
+        ObjectMapper om= new ObjectMapper();
+        Message message = om.readValue(context.body(), Message.class);
+        Message createdMessage = messageService.createNewMessage(message);
+        if(createdMessage != null){
+            context.json(createdMessage);
+            context.status(200);
+        }else{
+            context.status(400);
+        }
     }
-
     //4. Retrieve all messages
     /**
      * This is an example handler for an example endpoint.
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
-    private void exampleHandler(Context context) {
-        context.json("sample text");
+    private void getAllMessages(Context context) {
+        List<Message> messages = messageService.getAllMessages();
+        context.json(messages);
     }
 
     //5. Retrieve a message by ID
@@ -103,8 +123,15 @@ public class SocialMediaController {
      * This is an example handler for an example endpoint.
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
-    private void exampleHandler(Context context) {
-        context.json("sample text");
+    private void getMessageByID(Context context) throws JsonProcessingException {
+        int messageId = Integer.parseInt(context.pathParam("message_id"));
+        Message obtainedMessage = messageService.getMessageByID(messageId);
+        if(obtainedMessage != null){
+            context.json(obtainedMessage);
+            context.status(200);
+        }else{
+            context.status(400);
+        }
     }
 
     //6. Delete a message identified by ID
@@ -112,8 +139,15 @@ public class SocialMediaController {
      * This is an example handler for an example endpoint.
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
-    private void exampleHandler(Context context) {
-        context.json("sample text");
+    private void deleteMessageById(Context context) {
+        int messageId = Integer.parseInt(context.pathParam("message_id"));
+        Message deletedMessage = messageService.deleteMessageById(messageId);
+        if(deletedMessage != null){
+            context.json(deletedMessage);
+            context.status(200);
+        }else{
+            context.status(400);
+        }
     }
 
     //7. Update a message text identified by ID
@@ -121,8 +155,19 @@ public class SocialMediaController {
      * This is an example handler for an example endpoint.
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
-    private void exampleHandler(Context context) {
-        context.json("sample text");
+    private void updateMessageById(Context context) throws JsonProcessingException {
+        int messageId = Integer.parseInt(context.pathParam("message_id"));
+        ObjectMapper om = new ObjectMapper();
+        Message incomingMessage = om.readValue(context.body(), Message.class);
+        incomingMessage.setMessage_id(messageId); 
+    
+        Message updatedMessage = messageService.updateMessageById(incomingMessage);
+        if (updatedMessage != null) {
+            context.json(updatedMessage);
+            context.status(200);
+        } else {
+            context.status(400);
+        }
     }
 
     //8. Retrieve all messages by an account/user
@@ -130,8 +175,16 @@ public class SocialMediaController {
      * This is an example handler for an example endpoint.
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
-    private void exampleHandler(Context context) {
-        context.json("sample text");
+    private void getMessagesByAccountID(Context context) {
+        int accountId = Integer.parseInt(context.pathParam("account_id"));
+        List<Message> messages = messageService.getMessagesByAccountID(accountId);
+        
+        if (messages != null && !messages.isEmpty()) {
+            context.json(messages);
+            context.status(200);
+        } else {
+            context.status(404); // Optional: 404 if no messages found
+        }
     }
 
 

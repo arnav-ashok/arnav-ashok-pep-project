@@ -1,11 +1,8 @@
 package DAO;
 
 import Model.Account;
-import Model.Message;
 import Util.ConnectionUtil;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AccountDAO {
     //Extra to find if account already exists in DB
@@ -33,14 +30,12 @@ public class AccountDAO {
         Connection connection = ConnectionUtil.getConnection();
         try{
             String sql="INSERT INTO account (username, password) VALUES (?,?);";
-            PreparedStatement statement=connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement=connection.prepareStatement(sql);
             statement.setString(1, a.getUsername());
             statement.setString(2, a.getPassword());
-            statement.executeUpdate();
-            ResultSet pkeyResultSet = statement.getGeneratedKeys();
-            if(pkeyResultSet.next()){
-                int generated_account_id = pkeyResultSet.getInt(1);
-                return new Account(generated_account_id, a.getUsername(), a.getPassword());
+            int rowsAffected=statement.executeUpdate();
+            if(rowsAffected>0){
+                return new Account(a.getUsername(), a.getPassword());
             }
         }catch(SQLException e){
             System.out.println(e.getMessage());
