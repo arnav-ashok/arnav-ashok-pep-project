@@ -29,18 +29,23 @@ public class AccountDAO {
     }
 
     //1. Process new user registrations with a username/password
-    public void insertNewAccount(Account a){
+    public Account insertNewAccount(Account a){
         Connection connection = ConnectionUtil.getConnection();
         try{
             String sql="INSERT INTO account (username, password) VALUES (?,?);";
-            PreparedStatement statement=connection.prepareStatement(sql);
+            PreparedStatement statement=connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, a.getUsername());
             statement.setString(2, a.getPassword());
             statement.executeUpdate();
-            
+            ResultSet pkeyResultSet = statement.getGeneratedKeys();
+            if(pkeyResultSet.next()){
+                int generated_account_id = pkeyResultSet.getInt(1);
+                return new Account(generated_account_id, a.getUsername(), a.getPassword());
+            }
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
+        return null;
 
     }
     //2. Process user logins that match the DB username/password

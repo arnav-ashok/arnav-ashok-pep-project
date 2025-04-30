@@ -18,6 +18,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
 public class SocialMediaController {
+    AccountService accountService;
+    MessageService messageService;
+
+    public SocialMediaController(){
+        this.accountService=new AccountService();
+        this.messageService=new MessageService();
+    }
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
      * suite must receive a Javalin object from this method.
@@ -60,10 +67,8 @@ public class SocialMediaController {
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      * In this case, we will be handling the register POST request.
      */
-    private void registerHandler(Context context) throws JsonProcessingException {
-        ObjectMapper om= new ObjectMapper();
-        Account account = om.readValue(context.body(), Account.class);
-        context.json("sample text");
+    private void registerUser(Context context) throws JsonProcessingException {
+        
     }
 
     //2. Process user logins that match the DB username/password
