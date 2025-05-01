@@ -34,7 +34,7 @@ public class SocialMediaController {
      */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
-        app.start(8080);
+        //app.start(8080);
         //1. Process new user registrations with a username/password
         app.post("/register", this::addAccount);
         //2. Process user logins that match the DB username/password
