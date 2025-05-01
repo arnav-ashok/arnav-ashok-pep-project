@@ -87,7 +87,7 @@ public class SocialMediaController {
             context.json(loginAccount);
             context.status(200);
         }else{
-            context.status(400);
+            context.status(401);
         }
 
     }
@@ -142,11 +142,12 @@ public class SocialMediaController {
     private void deleteMessageById(Context context) {
         int messageId = Integer.parseInt(context.pathParam("message_id"));
         Message deletedMessage = messageService.deleteMessageById(messageId);
-        if(deletedMessage != null){
+        if (deletedMessage == null) {
+            context.status(200);
+            context.result("");  // <--- THIS CLEARS THE BODY
+        } else {
             context.json(deletedMessage);
             context.status(200);
-        }else{
-            context.status(400);
         }
     }
 
@@ -178,14 +179,9 @@ public class SocialMediaController {
     private void getMessagesByAccountID(Context context) {
         int accountId = Integer.parseInt(context.pathParam("account_id"));
         List<Message> messages = messageService.getMessagesByAccountID(accountId);
-        
-        if (messages != null && !messages.isEmpty()) {
-            context.json(messages);
-            context.status(200);
-        } else {
-            context.status(404); // Optional: 404 if no messages found
+        context.json(messages);
+        context.status(200);
         }
     }
 
 
-}

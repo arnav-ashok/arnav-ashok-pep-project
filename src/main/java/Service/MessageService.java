@@ -18,7 +18,7 @@ public class MessageService {
     //3. Process the creation of new messages
     public Message createNewMessage(Message m) {
         int posted_by= m.getPosted_by();
-        if(m != null && m.getMessage_text() != null && m.getMessage_text().length()<=255){
+        if(m != null && m.getMessage_text() != null && m.getMessage_text().length()<=255&& !m.getMessage_text().trim().isEmpty()){
             if (messageDAO.doesAccountExist(posted_by)){
                 return messageDAO.createNewMessage(m);
 
@@ -39,20 +39,23 @@ public class MessageService {
     }
     //6. Delete a message identified by ID
     public Message deleteMessageById(int message_id) {
-        Message deletedMessage= messageDAO.getMessageByID(message_id);
-        boolean check = messageDAO.deleteMessageById(message_id);
-        if(check && deletedMessage!=null){
-            return deletedMessage;
-        }else{
+        Message retrievedMessage= messageDAO.getMessageByID(message_id);
+        if(retrievedMessage==null){
             return null;
         }
+        boolean check = messageDAO.deleteMessageById(message_id);
+        if(check){
+            return retrievedMessage;
+        }
+        return null;
+    }
 
         
-    }
+    
     
     //7. Update a message text identified by ID
     public Message updateMessageById(Message m) {
-        if (m != null && m.getMessage_text() != null && m.getMessage_text().length()<=255){
+        if (m != null && m.getMessage_text() != null && m.getMessage_text().length()<=255 && !m.getMessage_text().trim().isEmpty()){
             return messageDAO.updateMessageById(m);
         }else{
             return null;

@@ -29,10 +29,11 @@ public class AccountDAO {
     public Account addAccount(Account a){
         Connection connection = ConnectionUtil.getConnection();
         try{
-            String sql="INSERT INTO account (username, password) VALUES (?,?);";
+            String sql="INSERT INTO account (account_id, username, password) VALUES (?,?,?);";
             PreparedStatement statement=connection.prepareStatement(sql);
-            statement.setString(1, a.getUsername());
-            statement.setString(2, a.getPassword());
+            statement.setInt(1, a.getAccount_id());
+            statement.setString(2, a.getUsername());
+            statement.setString(3, a.getPassword());
             int rowsAffected=statement.executeUpdate();
             if(rowsAffected>0){
                 return new Account(a.getUsername(), a.getPassword());
