@@ -16,9 +16,14 @@ public class AccountService {
 
     //1. Process new user registrations with a username/password
     public Account addAccount(Account a) {
-        String username = a.getUsername();
-        if(a != null && a.getUsername() != null && a.getPassword() != null &&a.getUsername().length() > 0 && a.getPassword().length() >= 4 && !a.getUsername().trim().isEmpty() && !a.getPassword().trim().isEmpty()){
-            if (!accountDAO.doesAccountExist(username)){
+        if(a != null 
+        && a.getUsername() != null 
+        && a.getPassword() != null 
+        &&a.getUsername().length() > 0 
+        && a.getPassword().length() >= 4 
+        && !a.getUsername().trim().isEmpty() 
+        && !a.getPassword().trim().isEmpty()){
+            if (!accountDAO.doesAccountExist(a.getUsername())){
                 return accountDAO.addAccount(a);
 
             }

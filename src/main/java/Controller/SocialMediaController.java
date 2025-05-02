@@ -130,7 +130,7 @@ public class SocialMediaController {
             context.json(obtainedMessage);
             context.status(200);
         }else{
-            context.status(400);
+            context.status(200);
         }
     }
 

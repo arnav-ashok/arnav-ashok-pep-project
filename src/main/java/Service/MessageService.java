@@ -55,7 +55,9 @@ public class MessageService {
     
     //7. Update a message text identified by ID
     public Message updateMessageById(Message m) {
-        if (m != null && m.getMessage_text() != null && m.getMessage_text().length()<=255 && !m.getMessage_text().trim().isEmpty()){
+        if (m != null && m.getMessage_text() != null 
+        && m.getMessage_text().length()<=255 
+        && !m.getMessage_text().trim().isEmpty()){
             return messageDAO.updateMessageById(m);
         }else{
             return null;
